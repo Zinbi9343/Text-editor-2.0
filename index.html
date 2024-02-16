@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Editor</title>
+    <style>
+        /* CSS styles for the editor container */
+#editor-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    width: 600px; /* Adjust width as needed */
+    height: 300px; /* Adjust height as needed */
+    overflow-y: auto; /* Add scrollbar if content overflows vertically */
+}
+ 
+        img {
+            position: absolute;
+            width: 100px;
+            height: auto;
+            }
+/* CSS styles for the editor buttons */
+button {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* CSS styles for specific buttons */
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    background-color: #d0d0d0;
+}
+/* CSS styles for the editor buttons */
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* Adjust column width as needed */
+    grid-gap: 5px; /* Adjust gap between buttons as needed */
+}
+
+button {
+    margin: 5px;
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+/* CSS styles for specific buttons */
+button:hover {
+    background-color: #e0e0e0;
+}
+
+button:active {
+    background-color: #d0d0d0;
+}
+
+/* CSS styles for buttons with specific functions */
+button[data-function="format"] {
+    background-color: #a0d4ff; /* Adjust color for format buttons */
+}
+
+button[data-function="insert"] {
+    background-color: #ffd380; /* Adjust color for insert buttons */
+}
+
+button[data-function="misc"] {
+    background-color: #b0f2b6; /* Adjust color for miscellaneous buttons */
+}
+    </style>
+</head>
+<body>
+  <div 
+        <img id="image" src="https://via.placeholder.com/150" alt="Resizable and draggable image">
+    </div>
+    <div>
+        <label for="template">Select Template:</label>
+        <select id="template" onchange="applyTemplate()">
+            <option value="default">Default</option>
+            <option value="newsletter">Newsletter</option>
+            <option value="blog">Blog Post</option>
+                        <option value="resume">Resume</option>
+                                    <option value="academic">Academic</option>
+                                                <option value="custom1">Custom1</option>
+                                                            <option value="custom2">Custom2</option>
+            <!-- Add more template options as needed -->
+        </select>
+    </div>
+
+    <div id="editor-container" contenteditable="true">
+        <!-- Editor content will be displayed here -->
+        <p>Type your text here...</p>
+    </div>
+    
+    <!-- Editor functions -->
+    <div>
+        <button onclick="formatText('bold')">Bold</button>
+        <button onclick="formatText('italic')">Italic</button>
+        <button onclick="formatText('underline')">Underline</button>
+        <button onclick="formatText('strikeThrough')">Strikethrough</button>
+        <button onclick="formatText('subscript')">Subscript</button>
+        <button onclick="formatText('superscript')">Superscript</button>
+        <button onclick="formatText('removeFormat')">Remove Format</button>
+        <button onclick="formatText('justifyLeft')">Align Left</button>
+        <button onclick="formatText('justifyCenter')">Align Center</button>
+        <button onclick="formatText('justifyRight')">Align Right</button>
+        <button onclick="formatText('justifyFull')">Justify</button>
+        <button onclick="formatText('indent')">Indent</button>
+        <button onclick="formatText('outdent')">Outdent</button>
+        <button onclick="formatText('insertUnorderedList')">Bullets</button>
+        <button onclick="formatText('insertOrderedList')">Numbered List</button>
+        <button onclick="insertLink()">Insert Link</button>
+        <button onclick="insertImage()">Insert Image</button>
+        <select onchange="formatText('fontSize', this.value)">
+            <option value="1">Small</option>
+            <option value="3">Normal</option>
+            <option value="5">Large</option>
+        </select>
+        <input type="color" onchange="formatText('foreColor', this.value)">
+        <input type="color" onchange="formatText('hiliteColor', this.value)">
+        <button onclick="clearFormatting()">Clear Formatting</button>
+        <button onclick="cutText()">Cut</button>
+        <button onclick="copyText()">Copy</button>
+        <button onclick="pasteText()">Paste</button>
+        <button onclick="selectAllText()">Select All</button>
+        <button onclick="undo()">Undo</button>
+        <button onclick="redo()">Redo</button>
+        <button onclick="toggleSpellcheck()">Spellcheck</button>
+        <button onclick="findText()">Find</button>
+        <button onclick="replaceText()">Replace</button>
+        <button onclick="saveFile()">Save</button>
+        <button onclick="loadFile()">Load</button>
+        <button onclick="insertCodeBlock()">Code Block</button>
+        <button onclick="insertTable()">Insert Table</button>
+        <button onclick="insertSpecialCharacter()">Special Character</button>
+        <button onclick="changeFont()">Change Font</button>
+        <button onclick="changeBackgroundColor()">Background Color</button>
+        <button onclick="toggleFullScreen()">Full Screen</button>
+        <button onclick="changeTextDirection('rtl')">Right-to-Left</button>
+        <button onclick="exportToMarkdown()">Export to Markdown</button>
+        
+        <button onclick="changeTextDirection('ltr')">Left-to-Right</button>
+        <button onclick="insertHorizontalLine()">Insert Horizontal Line</button>
+        <button onclick="toggleWordWrap()">Toggle Word Wrap</button>
+        <!-- Add event listeners for drag and drop -->
+<div id="editor-container" contenteditable="true" ondragover="event.preventDefault()" ondrop="event.preventDefault()">
+    
+    <!-- Ensure proper use of ARIA attributes for accessibility -->
+<div id="editor-container" contenteditable="true" role="textbox" aria-multiline="true" tabindex="0">
+    
+    
+            <label for="font-family">Font Family:</label>
+        <!-- Font Family Selector -->
+<label for="font-family">Font Family:</label>
+<select id="font-family" onchange="changeFontFamily()">
+    <option value="Arial">Arial</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Times New Roman">Times New Roman</option>
+    <option value="Courier New">Courier New</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Tahoma">Tahoma</option>
+    <!-- Additional font options -->
+    <option value="Helvetica">Helvetica</option>
+    <option value="Calibri">Calibri</option>
+    <option value="Lucida Sans">Lucida Sans</option>
+    <option value="Trebuchet MS">Trebuchet MS</option>
+    <option value="Palatino">Palatino</option>
+    <option value="Garamond">Garamond</option>
+    <option value="Book Antiqua">Book Antiqua</option>
+    <!-- Cursive fonts -->
+    <option value="cursive">Cursive</option>
+    <option value="Comic Sans MS">Comic Sans MS</option>
+    <option value="Brush Script MT">Brush Script MT</option>
+    <option value="Snell Roundhand">Snell Roundhand</option>
+    <option value="Apple Chancery">Apple Chancery</option>
+    <option value="Bradley Hand">Bradley Hand</option>
+    <!-- Add more font options here -->
+    <option value="Impact">Impact</option>
+    <option value="Arial Black">Arial Black</option>
+    <option value="Century Gothic">Century Gothic</option>
+    <option value="Rockwell">Rockwell</option>
+    <option value="Courier">Courier">Courier</option>
+    <option value="Geneva">Geneva</option>
+    <option value="Verdana">Verdana</option>
+    <option value="Arial Narrow">Arial Narrow</option>
+    <option value="Tahoma">Tahoma</option>
+    <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+    <option value="Baskerville">Baskerville</option>
+    <option value="Futura">Futura</option>
+    <option value="Gill Sans">Gill Sans</option>
+    <option value="Copperplate">Copperplate</option>
+    <option value="Didot">Didot</option>
+    <option value="Bodoni">Bodoni</option>
+    <option value="Optima">Optima</option>
+    <option value="Avant Garde">Avant Garde</option>
+</select>
+        <select id="font-size" onchange="changeFontSize()">
+            <option value="1">Small</option>
+            <option value="3">Normal</option>
+            <option value="5">Large</option>
+        </select>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<!-- Include Prism.js library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+    <script>
+     // JavaScript functions for the editor
+
+function formatText(command, value = null) {
+    document.execCommand(command, false, value);
+}
+
+function insertLink() {
+    var url = prompt("Enter the URL:");
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+
+function insertImage() {
+    var url = prompt("Enter the image URL:");
+    if (url) {
+        document.execCommand('insertImage', false, url);
+    }
+}
+
+function clearFormatting() {
+    document.execCommand('removeFormat', false, null);
+}
+
+function cutText() {
+    document.execCommand('cut', false, null);
+}
+
+function copyText() {
+    document.execCommand('copy', false, null);
+}
+
+function pasteText() {
+    document.execCommand('paste', false, null);
+}
+
+function selectAllText() {
+    document.execCommand('selectAll', false, null);
+}
+
+function undo() {
+    document.execCommand('undo', false, null);
+}
+
+function redo() {
+    document.execCommand('redo', false, null);
+}
+
+function toggleSpellcheck() {
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('spellcheck', false, true);
+}
+
+function findText() {
+    var searchTerm = prompt("Enter the text to find:");
+    if (searchTerm) {
+        var range = document.getSelection().getRangeAt(0);
+        range.collapse(false);
+        while (range.toString().indexOf(searchTerm) !== -1) {
+            range.expand('word');
+            range = document.getSelection().getRangeAt(0);
+            range.collapse(false);
+        }
+    }
+}
+
+function replaceText() {
+    var searchTerm = prompt("Enter the text to find:");
+    if (searchTerm) {
+        var replaceTerm = prompt("Enter the text to replace with:");
+        if (replaceTerm) {
+            document.body.innerHTML = document.body.innerHTML.replace(new RegExp(searchTerm, "gi"), replaceTerm);
+        }
+    }
+}
+
+
+
+function loadFile() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'text/html';
+    input.onchange = function(event) {
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function() {
+            var content = reader.result;
+            document.getElementById('editor-container').innerHTML = content;
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function insertCodeBlock() {
+    var codeBlock = prompt("Enter code block content:");
+    if (codeBlock) {
+        document.execCommand('insertHTML', false, '<pre>' + codeBlock + '</pre>');
+    }
+}
+
+function insertTable() {
+    var rows = prompt("Enter number of rows:");
+    var columns = prompt("Enter number of columns:");
+    var html = '<table border="1">';
+    for (var i = 0; i < rows; i++) {
+        html += '<tr>';
+        for (var j = 0; j < columns; j++) {
+            html += '<td>Cell</td>';
+        }
+        html += '</tr>';
+    }
+    html += '</table>';
+    document.execCommand('insertHTML', false, html);
+}
+
+function insertSpecialCharacter() {
+    var character = prompt("Enter special character:");
+    if (character) {
+        document.execCommand('insertText', false, character);
+    }
+}
+
+function changeBackgroundColor() {
+    var color = prompt("Enter background color:");
+    if (color) {
+        document.execCommand('hiliteColor', false, color);
+    }
+}
+
+function toggleFullScreen() {
+    document.documentElement.requestFullscreen();
+}
+
+function changeTextDirection(direction) {
+    document.execCommand('direction', false, direction);
+}
+
+function insertHorizontalLine() {
+    document.execCommand('insertHorizontalRule', false, null);
+}
+
+function toggleWordWrap() {
+    document.execCommand('styleWithCSS', false, true);
+    document.execCommand('defaultParagraphSeparator', false, 'div');
+    document.body.contentEditable = !document.body.contentEditable;
+}
+
+function applyTemplate() {
+    var template = document.getElementById('template').value;
+    var editorContent = document.getElementById('editor-container');
+
+    switch(template) {
+        case 'newsletter':
+            editorContent.innerHTML = `
+                <h1>Newsletter Title</h1>
+                <p>Introduction paragraph...</p>
+                <h2>Section 1</h2>
+                <p>Content of section 1...</p>
+                <h2>Section 2</h2>
+                <p>Content of section 2...</p>
+            `;
+            break;
+        case 'blog':
+            editorContent.innerHTML = `
+                <h1>Blog Post Title</h1>
+                <p>Posted on January 1, 2025</p>
+                <p>Blog post content...</p>
+                <blockquote>Quote here...</blockquote>
+                <p>More content...</p>
+            `;
+            break;
+        case 'custom1':
+            editorContent.innerHTML = `
+                <h1>Custom Template 1</h1>
+                <p>Custom content...</p>
+            `;
+            break;
+        case 'custom2':
+            editorContent.innerHTML = `
+                <h1>Custom Template 2</h1>
+                <p>More custom content...</p>
+            `;
+            break;
+        // Add more custom templates
+        case 'academic':
+            editorContent.innerHTML = `
+                <h1>Academic Paper</h1>
+                <p>Abstract...</p>
+                <h2>Introduction</h2>
+                <p>Introduction content...</p>
+                <h2>Methodology</h2>
+                <p>Methodology details...</p>
+                <h2>Results</h2>
+                <p>Research results...</p>
+                <h2>Conclusion</h2>
+                <p>Conclusion summary...</p>
+            `;
+            break;
+        case 'resume':
+            editorContent.innerHTML = `
+                <h1>Resume</h1>
+                <h2>Personal Information</h2>
+                <p>Name, contact details...</p>
+                <h2>Education</h2>
+                <p>Educational background...</p>
+                <h2>Experience</h2>
+                <p>Work experience...</p>
+                <h2>Skills</h2>
+                <p>Skills summary...</p>
+            `;
+            break;
+        default:
+            // Default template (empty)
+            editorContent.innerHTML = '';
+            break;
+    }
+}
+
+// Function to change font family
+function changeFontFamily() {
+    var fontFamily = document.getElementById('font-family').value;
+    document.execCommand('fontName', true, fontFamily);
+}
+function saveFile() {
+    var title = document.title;
+    var editorContent = document.getElementById('editor-container').innerHTML;
+    
+    var format = prompt("Choose format: PDF, Image, or Text File").toLowerCase();
+    
+    switch(format) {
+        case 'pdf':
+            // Code to save as PDF
+            var pdf = new jsPDF();
+            pdf.text(editorContent, 10, 10);
+            pdf.save(title + ".pdf");
+            break;
+        case 'image':
+            // Code to save as image
+            html2canvas(document.getElementById('editor-container')).then(canvas => {
+                var imgData = canvas.toDataURL('image/png');
+                var link = document.createElement('a');
+                link.download = title + ".png";
+                link.href = imgData;
+                link.click();
+            });
+            break;
+        case 'text file':
+            // Code to save as text file
+            var blob = new Blob([editorContent], { type: 'text/plain' });
+            var link = document.createElement('a');
+            link.download = title + ".txt";
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+            break;
+        default:
+            alert("Invalid format choice.");
+    }
+}
+// Function to change font size
+function changeFontSize() {
+    var fontSize = document.getElementById('font-size').value;
+    document.execCommand('fontSize', false, fontSize);
+}
+// Functions to save and load content from local storage
+function saveToLocalStorage() {
+    localStorage.setItem('editorContent', document.getElementById('editor-container').innerHTML);
+}
+
+function loadFromLocalStorage() {
+    var content = localStorage.getItem('editorContent');
+    if (content) {
+        document.getElementById('editor-container').innerHTML = content;
+    }
+}// Function to display undo/redo history
+function showHistory() {
+    var undoStack = document.getElementById('editor-container').undoManager.stack;
+    var redoStack = document.getElementById('editor-container').redoManager.stack;
+    console.log("Undo History:", undoStack);
+    console.log("Redo History:", redoStack);
+}// Function to export content to different formats like Markdown
+function exportToMarkdown() {
+    // Code to convert HTML content to Markdown format
+}// Add event listeners for drag and drop functionality
+document.addEventListener('dragover', function(event) {
+    event.preventDefault();
+});
+
+document.addEventListener('drop', function(event) {
+    event.preventDefault();
+    var files = event.dataTransfer.files;
+    // Code to handle dropped files
+});
+   // JavaScript for image resizing and dragging
+        const image = document.getElementById('image');
+        let isResizing = false;
+        let isDragging = false;
+        let initialX;
+        let initialY;
+        let initialWidth;
+        let initialHeight;
+
+        image.addEventListener('mousedown', startResize);
+        image.addEventListener('mousemove', resize);
+        image.addEventListener('mouseup', stopResize);
+        image.addEventListener('mouseleave', stopResize);
+        image.addEventListener('dragstart', startDrag);
+        image.addEventListener('dragend', stopDrag);
+
+        function startResize(e) {
+            e.preventDefault();
+            isResizing = true;
+            initialX = e.clientX;
+            initialY = e.clientY;
+            initialWidth = parseFloat(getComputedStyle(image).width);
+            initialHeight = parseFloat(getComputedStyle(image).height);
+        }
+
+        function resize(e) {
+            if (!isResizing) return;
+            const width = initialWidth + e.clientX - initialX;
+            const height = initialHeight + e.clientY - initialY;
+            image.style.width = `${width}px`;
+            image.style.height = `${height}px`;
+        }
+
+        function stopResize() {
+            isResizing = false;
+        }
+
+        function startDrag(e) {
+            e.preventDefault();
+            isDragging = true;
+            initialX = e.clientX - parseFloat(getComputedStyle(image).left);
+            initialY = e.clientY - parseFloat(getComputedStyle(image).top);
+        }
+
+        function stopDrag() {
+            isDragging = false;
+        }
+
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', stopDrag);
+
+        function drag(e) {
+            if (!isDragging) return;
+            image.style.left = `${e.clientX - initialX}px`;
+            image.style.top = `${e.clientY - initialY}px`;
+        }
+    </script>
+</body>
+</html>
